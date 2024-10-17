@@ -67,7 +67,7 @@ Seach for them in the initial logger output when connected to the USB port using
 * For adding Wemos style boards (i.e., relay) with the case installed  use the long (19mm) provided pins.
   
 ## Software
-The ECB comes flashed with a fully functional ESPHome firmware which allows control of fans in either manual or automatic mode based and allows runtime selection of the onboard AHT20 or attached Dallas sensors. This firmware interfaces with Home Assistant's native interface or by MQTT.  Use the application as is or customise the YAML source code for your specific needs. The firmware sports a webserver also allowing local control of the board.
+The ECB comes flashed with a fully functional ESPHome firmware which allows control of fans in either manual or automatic mode, and allows runtime selection of the onboard AHT20 or attached Dallas sensors. This firmware interfaces with Home Assistant's native interface or by MQTT.  Use the application as is or customise the YAML source code for your specific needs. The firmware sports a webserver also allowing local control of the board shown below.
 
 <img src="work/App1.jpg" width=913>
 <img src="work/App2.jpg" width=913>
