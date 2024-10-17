@@ -50,7 +50,7 @@ https://github.com/ESP32andmore/ECB/blob/main/ESPhome/avfan1.yaml
 * Flash over USB or ethernet. To flash over USB use ESPhome Web Flasher https://web.esphome.io/
 with the device powered and connected to your host machine.
 
-* For Dallas style sensors (board preprogrammed with logger level: DEBUG), to get device ID follow
+* For Dallas sensors (flash board with logger level: DEBUG), to get device ID follow
 Seach for them in the initial logger output when connected to the USB port using ESPhome Web Flasher.
   - Connect your Dallas sensors with logger: DEBUG enabled (factory flash default).
   - Open the ESPHome webtool, connect to the ECB board, view the "Logs" window, hit "Reset",and search for Dallas scan addresses and replace the below addresses with your unique ones. 
