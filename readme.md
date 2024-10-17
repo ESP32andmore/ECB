@@ -69,8 +69,8 @@ Seach for them in the initial logger output when connected to the USB port using
 ## Software
 The ECB comes flashed with a fully functional ESPHome firmware which allows control of fans in either manual or automatic mode based and allows runtime selection of the onboard AHT20 or attached Dallas sensors. This firmware interfaces with Home Assistant's native interface or by MQTT.  Use the application as is or customise the YAML source code for your specific needs. The firmware sports a webserver also allowing local control of the board.
 
-![App2](https://github.com/user-attachments/assets/cd09b0f1-d60d-4f65-9c79-6789b828573d)
-
+<img src="work/App1.jpg" width=900>
+<img src="work/App2.jpg" width=900>
 
 ## Connector to GPIO Mapping.
 
