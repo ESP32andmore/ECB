@@ -1,7 +1,7 @@
 # VERSION 2.1 UPDATED WITH NEW FEATURES 
 ### BUY - https://www.tindie.com/products/28875/
 
-## Update notices
+## Update Notices
 10/17/24 - We created a new YAML for the ECB which allows selection of which sensor controls which fan at runtime when in automatic mode. It also adds Version 3 of the Webserver.
 
 ## Description
