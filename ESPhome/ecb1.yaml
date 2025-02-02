@@ -1,5 +1,6 @@
 # Four automatically controlled PWM fan outputs (J4-J7), each set by four target temperatures, maintained by four Dallas sensor's temperatures. MQTT enabled. Home Assistant API disabled. DHCP enabled.
 # Other control configurations available with modification of Dallas platform LAMBDA function. Contact us at esp32andmore@gmail.com for no cost customization.
+# Ver. 3.1
 substitutions:
   devicename: ecb1
   friendlyname: ECB1
