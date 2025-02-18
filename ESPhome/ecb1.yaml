@@ -1,6 +1,7 @@
 # Four automatically controlled PWM fan outputs (J4-J7), each set by four target temperatures, maintained by four Dallas sensor's temperatures. MQTT enabled. Home Assistant API disabled. DHCP enabled.
 # Other control configurations available with modification of Dallas platform LAMBDA function. Contact us at esp32andmore@gmail.com for no cost customization.
-# Ver. 3.1
+# Ver 3.1
+
 substitutions:
   devicename: ecb1
   friendlyname: ECB1
@@ -23,10 +24,15 @@ substitutions:
 #[18:16:42][D][dallas.sensor:084]:     0xc13c01f09642c928 1
 #[18:16:42][D][dallas.sensor:084]:     0x043c6ef649772f28 3
   dallasaddress1: "0xc13c01f09642c928"
-  #dallasaddress1: "0x7a00000069d73728"
   dallasaddress2: "0x783c0af6490d3628"
   dallasaddress3: "0x043c6ef649772f28"
   dallasaddress4: "0x8b3ca8f64935b228"
+  #dallasaddress1: "0x680000006a766a28"
+  #dallasaddress2: "0x290000006b186628"
+  #dallasaddress3: "0x690000006b6ef628"
+  #dallasaddress4: "0xbc0000006b120328"
+
+
 
 #external_components:
 #  - source:
@@ -41,22 +47,23 @@ esphome:
   name: ${devicename}
   friendly_name: ${friendlyname}
 
-  on_boot:
-  - priority: 900.0
-    then:
-      - lambda: |-
-          id(cpu_speed) = ESP.getCpuFreqMHz();
+#  on_boot:
+#  - priority: 900.0
+#    then:
+#      - lambda: |-
+#          id(cpu_speed) = ESP.getCpuFreqMHz();
 
 esp32:
   board: wemos_d1_mini32
   framework:
-    type: arduino
+    type: esp-idf
 
 preferences:
   flash_write_interval: 10min
     
 wifi:
   ssid: ${ssid}
+  #password: "none6666"
   password: ${password}
   #fast_connect: true
   #example static IP settings
@@ -67,17 +74,23 @@ wifi:
     #dns1: 192.168.0.1
     #dns2: 8.8.8.8
 
+
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: ${fdevicename} Fallback Hotspot
+    ssid: ${fdevicename}Fallback Hotspot
     password: "esphome1"
     manual_ip:
       static_ip: 192.168.100.2
       gateway: 192.168.100.2
       subnet: 255.255.255.0
-
     
-captive_portal:
+#captive_portal:
+
+#esp32_improv:
+  #authorizer: false
+  #status_indicator: gpio_02
+  #identify_duration: 20s
+  #wifi_timeout: 30s
 
 ota:
   - platform: esphome
@@ -86,7 +99,7 @@ ota:
 #safe_mode:
 
 #mqtt:
-  #broker: 192.168.0.100   # use your own MQTT server address and credentials
+  #broker: 192.168.2.11   # use your own MQTT server address and credentials
   #username: "john"
   #password: "trek6666"
   #reboot_timeout: 0s
@@ -100,7 +113,7 @@ web_server:
   port: 80
   version: 3
   local: true
-  log: false
+  log: true
 
 
 time:
@@ -108,7 +121,7 @@ time:
     id: current_time
 
 debug:
-  update_interval: 5s
+  update_interval: 1s
 
 logger:
   level: Debug
@@ -171,86 +184,86 @@ globals:
 number:
   - platform: template
     id: set_target_temp_1
-    name: ${fdevicename} Fan 1 Target Temp
+    name: ${fdevicename}Fan 1 Target
     optimistic: true
     min_value: 15
-    max_value: 50
+    max_value: 100
     initial_value: '26'
     step: 1
     restore_value: true
-    unit_of_measurement: °C
-    device_class: "TEMPERATURE"
+    #unit_of_measurement: °C
+    #device_class: "TEMPERATURE"
     #entity_category: "CONFIG"
     icon: mdi:temperature-celsius
     #command_topic: ${devicename}/number/${devicename}_target_temp_1/command  #add for MQTT
 
   - platform: template
     id: set_target_temp_2
-    name: ${fdevicename} Fan 2 Target Temp
+    name: ${fdevicename}Fan 2 Target
     optimistic: true
     min_value: 15
-    max_value: 50
+    max_value: 100
     initial_value: '26'
     step: 1
     restore_value: true
-    unit_of_measurement: °C
-    device_class: "TEMPERATURE"
+    #unit_of_measurement: °C
+    #device_class: "TEMPERATURE"
     #entity_category: "CONFIG"
     icon: mdi:temperature-celsius
     #command_topic: ${devicename}/number/${devicename}_target_temp_2/command  #add for MQTT
 
   - platform: template
     id: set_target_temp_3
-    name: ${fdevicename} Fan 3 Target Temp
+    name: ${fdevicename}Fan 3 Target
     optimistic: true
     min_value: 15
-    max_value: 50
+    max_value: 100
     initial_value: '26'
     step: 1
     restore_value: true
-    unit_of_measurement: °C
-    device_class: "TEMPERATURE"
+    #unit_of_measurement: °C
+    #device_class: "TEMPERATURE"
     #entity_category: "CONFIG"
     icon: mdi:temperature-celsius
     #command_topic: ${devicename}/number/${devicename}_target_temp_3/command  #add for MQTT
     
   - platform: template
     id: set_target_temp_4
-    name: ${fdevicename} Fan 4 Target Temp
+    name: ${fdevicename}Fan 4 Target
     optimistic: true
     min_value: 15
-    max_value: 50
+    max_value: 100
     initial_value: '26'
     step: 1
     restore_value: true
-    unit_of_measurement: °C
-    device_class: "TEMPERATURE"
+    #unit_of_measurement: °C
+    #device_class: "TEMPERATURE"
     #entity_category: "CONFIG"
     icon: mdi:temperature-celsius
     #command_topic: ${devicename}/number/${devicename}_target_temp_4/command  #add for MQTT
 
   - platform: template
     id: set_alarm_temp
-    name: ${fdevicename} Alarm Temp
+    name: ${fdevicename}Alarm Value
     optimistic: true
     min_value: 15
-    max_value: 80
+    max_value: 100
     initial_value: ${alarm_temp}
     step: 1
     restore_value: true
-    unit_of_measurement: °C
-    device_class: "TEMPERATURE"
+    #unit_of_measurement: °C
+    #device_class: "TEMPERATURE"
     entity_category: "CONFIG"
     icon: mdi:thermometer
   
 switch:
   - platform: restart
-    name: ${fdevicename} Restart
+    name: ${fdevicename}Restart
     entity_category: "CONFIG"
     icon: mdi:restart
 
   - platform: gpio
-    name: ${fdevicename} Relay 0
+    name: ${fdevicename}Relay 0
     pin: GPIO18
     id: relay_0
     restore_mode: restore_default_off
@@ -259,7 +272,7 @@ switch:
 
   - platform: template
     id: auto_fan1
-    name: ${fdevicename} Fan 1 Auto Mode
+    name: ${fdevicename}Fan 1 Auto Mode
     restore_mode: RESTORE_DEFAULT_ON
     optimistic: true
     icon: mdi:fan-auto     
@@ -274,7 +287,7 @@ switch:
 
   - platform: template
     id: auto_fan2
-    name: ${fdevicename} Fan 2 Auto Mode
+    name: ${fdevicename}Fan 2 Auto Mode
     restore_mode: RESTORE_DEFAULT_ON
     optimistic: true 
     icon: mdi:fan-auto   
@@ -289,7 +302,7 @@ switch:
 
   - platform: template
     id: auto_fan3
-    name: ${fdevicename} Fan 3 Auto Mode
+    name: ${fdevicename}Fan 3 Auto Mode
     restore_mode: RESTORE_DEFAULT_ON
     optimistic: true 
     icon: mdi:fan-auto 
@@ -304,7 +317,7 @@ switch:
 
   - platform: template
     id: auto_fan4
-    name: ${fdevicename} Fan 4 Auto Mode
+    name: ${fdevicename}Fan 4 Auto Mode
     restore_mode: RESTORE_DEFAULT_ON
     optimistic: true 
     icon: mdi:fan-auto 
@@ -319,7 +332,7 @@ switch:
 
   - platform: gpio
     id: oc_port
-    name: ${fdevicename} OC Port
+    name: ${fdevicename}OC Port
     restore_mode: ALWAYS_ON
     entity_category: "CONFIG"
     icon: mdi:light-switch
@@ -365,7 +378,7 @@ light:
   - platform: monochromatic
     id: alarm_light
     output: gpio_02
-    name: ${fdevicename} Alarm Light
+    name: ${fdevicename}Alarm Light
     entity_category: "CONFIG"
     icon: mdi:light-alert
     effects:
@@ -386,11 +399,12 @@ i2c:
   - id: bus_a
     sda: GPIO21
     scl: GPIO22
-    scan: false
+    scan: True
+    frequency: 400khz
   - id: bus_b
     sda: GPIO16
     scl: GPIO17
-    scan: false
+    scan: True
     frequency: 800khz
 
 #display:
@@ -406,18 +420,21 @@ i2c:
 
 select:
   - platform: template
-    name: "Fan 1 Temp Source"
+    name: ${fdevicename}Fan 1 Sensor
     id: fan_1_source
     icon: mdi:temperature-check
     optimistic: true
     restore_value: true
     options:
-      - AHT20
+      - AHT20T
+      - AHT20H
       - Dallas_1
       - Dallas_2
       - Dallas_3
       - Dallas_4
-    initial_option: AHT20
+      - SHT40T
+      - SHT40H
+    initial_option: AHT20T
     on_value:
       then:
         - globals.set:
@@ -425,18 +442,21 @@ select:
             value: '0'
 
   - platform: template
-    name: "Fan 2 Temp Source"
+    name: ${fdevicename}Fan 2 Sensor
     id: fan_2_source
     icon: mdi:temperature-check
     optimistic: true
     restore_value: true
     options:
-      - AHT20
+      - AHT20T
+      - AHT20H
       - Dallas_1
       - Dallas_2
       - Dallas_3
       - Dallas_4
-    initial_option: AHT20
+      - SHT40T
+      - SHT40H
+    initial_option: AHT20T
     on_value:
       then:
         - globals.set:
@@ -444,18 +464,21 @@ select:
             value: '0'
 
   - platform: template
-    name: "Fan 3 Temp Source"
+    name: ${fdevicename}Fan 3 Sensor
     id: fan_3_source
     icon: mdi:temperature-check
     optimistic: true
     restore_value: true
     options:
-      - AHT20
+      - AHT20T
+      - AHT20H
       - Dallas_1
       - Dallas_2
       - Dallas_3
       - Dallas_4
-    initial_option: AHT20
+      - SHT40T
+      - SHT40H
+    initial_option: AHT20T
     on_value:
       then:
         - globals.set:
@@ -463,18 +486,21 @@ select:
             value: '0'
 
   - platform: template
-    name: "Fan 4 Temp Source"
+    name: ${fdevicename}Fan 4 Sensor
     id: fan_4_source
     icon: mdi:temperature-check
     optimistic: true
     restore_value: true
     options:
-      - AHT20
+      - AHT20T
+      - ANT20H
       - Dallas_1
       - Dallas_2
       - Dallas_3
       - Dallas_4
-    initial_option: AHT20
+      - SHT40T
+      - SHT40H
+    initial_option: AHT20T
     on_value:
       then:
         - globals.set:
@@ -493,8 +519,9 @@ interval:
             for:
               time: 10s
               condition:
-                lambda: 'return (id(AHT20).state >= id(set_alarm_temp).state) ||(id(Dallas_1).state >= id(set_alarm_temp).state) || (id(Dallas_2).state >= id(set_alarm_temp).state) || 
-                          (id(Dallas_3).state >= id(set_alarm_temp).state) || (id(Dallas_4).state >= id(set_alarm_temp).state);'
+                lambda: 'return (id(AHT20T).state >= id(set_alarm_temp).state) || (id(Dallas_1).state >= id(set_alarm_temp).state) || (id(Dallas_2).state >= id(set_alarm_temp).state) || 
+                          (id(Dallas_3).state >= id(set_alarm_temp).state) || (id(Dallas_4).state >= id(set_alarm_temp).state) || (id(SHT40T).state >= id(set_alarm_temp).state);'
+
           then: 
             - light.turn_on:
                 id: alarm_light
@@ -506,9 +533,7 @@ interval:
                 id: alarm_light
             - lambda: !lambda |-
                 id(alarm_sen).publish_state(false);
-
       - lambda: !lambda |
-
           if (id(auto_fan1).state) {
             float fan_actual_temp1;
             auto index1 = id(fan_1_source).active_index();
@@ -517,11 +542,14 @@ interval:
             //} else {
             //  ESP_LOGE("Fan1", "No option is active");
             //}
-            if (index1.value() == 0) fan_actual_temp1 =  id(AHT20).state;
-            else if (index1.value() == 1) fan_actual_temp1 = id(Dallas_1).state;
-            else if (index1.value() == 2) fan_actual_temp1 = id(Dallas_2).state;
-            else if (index1.value() == 3) fan_actual_temp1 = id(Dallas_3).state;
-            else if (index1.value() == 4) fan_actual_temp1 = id(Dallas_4).state;
+            if (index1.value() == 0) fan_actual_temp1 =  id(AHT20T).state;
+            else if (index1.value() == 1) fan_actual_temp1 = id(AHT20H).state;
+            else if (index1.value() == 2) fan_actual_temp1 = id(Dallas_1).state;
+            else if (index1.value() == 3) fan_actual_temp1 = id(Dallas_2).state;
+            else if (index1.value() == 4) fan_actual_temp1 = id(Dallas_3).state;
+            else if (index1.value() == 5) fan_actual_temp1 = id(Dallas_4).state;
+            else if (index1.value() == 6) fan_actual_temp1 = id(SHT40T).state;
+            else if (index1.value() == 7) fan_actual_temp1 = id(SHT40H).state;
             else ESP_LOGE("Fan1", "Index %d does not exist", index1);
             float fan_desired_temp1 = id(set_target_temp_1).state;
             float diff1 = fan_actual_temp1 - fan_desired_temp1;
@@ -549,11 +577,14 @@ interval:
           if (id(auto_fan2).state) {
             float fan_actual_temp;
             auto index = id(fan_2_source).active_index();
-            if (index.value() == 0) fan_actual_temp =  id(AHT20).state;
-            else if (index.value() == 1) fan_actual_temp = id(Dallas_1).state;
-            else if (index.value() == 2) fan_actual_temp = id(Dallas_2).state;
-            else if (index.value() == 3) fan_actual_temp = id(Dallas_3).state;
-            else if (index.value() == 4) fan_actual_temp = id(Dallas_4).state;
+            if (index.value() == 0) fan_actual_temp =  id(AHT20T).state;
+            else if (index.value() == 1) fan_actual_temp = id(AHT20H).state;
+            else if (index.value() == 2) fan_actual_temp = id(Dallas_1).state;
+            else if (index.value() == 3) fan_actual_temp = id(Dallas_2).state;
+            else if (index.value() == 4) fan_actual_temp = id(Dallas_3).state;
+            else if (index.value() == 5) fan_actual_temp = id(Dallas_4).state;
+            else if (index.value() == 6) fan_actual_temp = id(SHT40T).state;
+            else if (index.value() == 7) fan_actual_temp = id(SHT40H).state;
             else ESP_LOGE("Fan1", "Index %d does not exist", index);
 
             float fan_desired_temp = id(set_target_temp_2).state;
@@ -581,11 +612,14 @@ interval:
           if (id(auto_fan3).state) {
             float fan_actual_temp;
             auto index = id(fan_3_source).active_index();
-            if (index.value() == 0) fan_actual_temp =  id(AHT20).state;
-            else if (index.value() == 1) fan_actual_temp = id(Dallas_1).state;
-            else if (index.value() == 2) fan_actual_temp = id(Dallas_2).state;
-            else if (index.value() == 3) fan_actual_temp = id(Dallas_3).state;
-            else if (index.value() == 4) fan_actual_temp = id(Dallas_4).state;
+            if (index.value() == 0) fan_actual_temp =  id(AHT20T).state;
+            else if (index.value() == 1) fan_actual_temp = id(AHT20H).state;
+            else if (index.value() == 2) fan_actual_temp = id(Dallas_1).state;
+            else if (index.value() == 3) fan_actual_temp = id(Dallas_2).state;
+            else if (index.value() == 4) fan_actual_temp = id(Dallas_3).state;
+            else if (index.value() == 5) fan_actual_temp = id(Dallas_4).state;
+            else if (index.value() == 6) fan_actual_temp = id(SHT40T).state;
+            else if (index.value() == 7) fan_actual_temp = id(SHT40H).state;
             else ESP_LOGE("Fan1", "Index %d does not exist", index);
 
             float fan_desired_temp = id(set_target_temp_3).state;
@@ -613,11 +647,14 @@ interval:
           if (id(auto_fan4).state) {
             float fan_actual_temp;
             auto index = id(fan_4_source).active_index();
-            if (index.value() == 0) fan_actual_temp =  id(AHT20).state;
-            else if (index.value() == 1) fan_actual_temp = id(Dallas_1).state;
-            else if (index.value() == 2) fan_actual_temp = id(Dallas_2).state;
-            else if (index.value() == 3) fan_actual_temp = id(Dallas_3).state;
-            else if (index.value() == 4) fan_actual_temp = id(Dallas_4).state;
+            if (index.value() == 0) fan_actual_temp =  id(AHT20T).state;
+            else if (index.value() == 1) fan_actual_temp = id(AHT20H).state;
+            else if (index.value() == 2) fan_actual_temp = id(Dallas_1).state;
+            else if (index.value() == 3) fan_actual_temp = id(Dallas_2).state;
+            else if (index.value() == 4) fan_actual_temp = id(Dallas_3).state;
+            else if (index.value() == 5) fan_actual_temp = id(Dallas_4).state;
+            else if (index.value() == 6) fan_actual_temp = id(SHT40T).state;
+            else if (index.value() == 7) fan_actual_temp = id(SHT40H).state;
             else ESP_LOGE("Fan1", "Index %d does not exist", index);
 
             float fan_desired_temp = id(set_target_temp_4).state;
@@ -643,20 +680,46 @@ interval:
           }
 
 sensor:
+  - platform: sht4x
+    i2c_id: bus_a
+    address: 0x44
+    heater_max_duty: 0.00
+    heater_power: "Low"
+    heater_time: "Short"
+    update_interval: 2s
+    temperature:
+      name: ${fdevicename}SHT40 Temp
+      id: SHT40T
+      filters:
+        - filter_out: NaN
+        - filter_out: nan
+        - offset: 0.0
+      icon: mdi:thermometer
+
+    humidity:
+      name: ${fdevicename}SHT40 Humidity
+      id: SHT40H
+      filters:
+        - filter_out: NaN
+        - filter_out: nan
+        - offset: 0.0
+      icon: mdi:humidity
+
   - platform: aht10
     i2c_id: bus_b
     address: 0x38
     variant: AHT20
     temperature:
-      id: AHT20
-      name: ${fdevicename} AHT20 Temp
+      id: AHT20T
+      name: ${fdevicename}AHT20 Temp
       device_class: "TEMPERATURE"
       icon: mdi:thermometer
       filters:
       - filter_out: NaN
       - offset: -6.0
     humidity:
-      name: ${fdevicename} AHT20 Humidity
+      name: ${fdevicename}AHT20 Humidity
+      id: AHT20H
       device_class: "HUMIDITY"
       icon: mdi:water-percent
     update_interval: 2s
@@ -664,7 +727,7 @@ sensor:
   - platform: dallas_temp
     address: ${dallasaddress1}
     id: Dallas_1
-    name: ${fdevicename} Dallas Temp 1
+    name: ${fdevicename}Dallas Temp 1
     update_interval: 2s
     #index: 0
     filters:
@@ -678,7 +741,7 @@ sensor:
   - platform: dallas_temp
     address: ${dallasaddress2}
     id: Dallas_2
-    name: ${fdevicename} Dallas Temp 2
+    name: ${fdevicename}Dallas Temp 2
     update_interval: 2s
     #index: 1
     filters:
@@ -691,7 +754,7 @@ sensor:
   - platform: dallas_temp
     address: ${dallasaddress3}
     id: Dallas_3
-    name: ${fdevicename} Dallas Temp 3
+    name: ${fdevicename}Dallas Temp 3
     update_interval: 2s
     #index: 2
     filters:
@@ -704,7 +767,7 @@ sensor:
   - platform: dallas_temp
     address: ${dallasaddress4}
     id: Dallas_4
-    name: ${fdevicename} Dallas Temp 4
+    name: ${fdevicename}Dallas Temp 4
     update_interval: 2s
     #index: 3
     filters:
@@ -717,7 +780,7 @@ sensor:
   - platform: pulse_counter
     pin: GPIO33
     unit_of_measurement: 'rpm'
-    name: ${fdevicename} Fan 1 Monitor
+    name: ${fdevicename}Fan 1 Monitor
     device_class: "SPEED"
     icon: mdi:fan
     update_interval: 5s
@@ -727,7 +790,7 @@ sensor:
   - platform: pulse_counter
     pin: GPIO34
     unit_of_measurement: 'rpm'
-    name: ${fdevicename} Fan 2 Monitor
+    name: ${fdevicename}Fan 2 Monitor
     device_class: "SPEED"
     icon: mdi:fan
     update_interval: 5s
@@ -737,7 +800,7 @@ sensor:
   - platform: pulse_counter
     pin: GPIO35
     unit_of_measurement: 'rpm'
-    name: ${fdevicename} Fan 3 Monitor
+    name: ${fdevicename}Fan 3 Monitor
     device_class: "SPEED"
     icon: mdi:fan
     update_interval: 5s
@@ -747,7 +810,7 @@ sensor:
   - platform: pulse_counter
     pin: GPIO39
     unit_of_measurement: 'rpm'
-    name: ${fdevicename} Fan 4 Monitor
+    name: ${fdevicename}Fan 4 Monitor
     device_class: "SPEED"
     icon: mdi:fan
     update_interval: 5s
@@ -755,7 +818,7 @@ sensor:
       - multiply: 0.5       
         
   - platform: wifi_signal
-    name: ${fdevicename} WiFi
+    name: ${fdevicename}WiFi
     entity_category: "DIAGNOSTIC"
     icon: mdi:wifi
     web_server:
@@ -763,15 +826,15 @@ sensor:
     update_interval: 30s
   
   - platform: uptime
-    name: ${fdevicename} Uptime
+    name: ${fdevicename}Uptime
     entity_category: "DIAGNOSTIC"
     icon: mdi:timer-sync-outline
     web_server:
       sorting_weight: 6
-    update_interval: 30s
+    update_interval: 1s
 
   - platform: template
-    name: ${fdevicename} CPU Speed
+    name: ${fdevicename}CPU Speed
     accuracy_decimals: 0
     unit_of_measurement: Mhz
     entity_category: "DIAGNOSTIC"
@@ -781,40 +844,40 @@ sensor:
     lambda: |-
       return (id(cpu_speed));
 
-  - platform: template
-    id: sys_esp_temperature
-    name: ${fdevicename} ESP Temp
-    lambda: return temperatureRead();
-    unit_of_measurement: °C
-    entity_category: "DIAGNOSTIC"
-    icon: mdi:thermometer
-    web_server:
-      sorting_weight: 7
-    update_interval: 30s
+#    id: sys_esp_temperature
+#    name: ${fdevicename}ESP Temp
+#    lambda: return temperatureRead();
+#    unit_of_measurement: °C
+#    entity_category: "DIAGNOSTIC"
+#    icon: mdi:thermometer
+#    web_server:
+#      sorting_weight: 7
+#    update_interval: 30s
 
   - platform: debug
     free:
-      name: ${fdevicename} Heap Free
+      name: ${fdevicename}Heap Free
       entity_category: "DIAGNOSTIC"
       web_server:
         sorting_weight: 9
     block:
-      name: ${fdevicename} Heap Max Block
+      name: ${fdevicename}Heap Max Block
       entity_category: "DIAGNOSTIC"
       web_server:
         sorting_weight: 10
     loop_time:
-      name: ${fdevicename} Loop Time
+      name: ${fdevicename}Loop Time
       entity_category: "DIAGNOSTIC"
       web_server:
         sorting_weight: 8
+      
       
 
 fan:
   - platform: speed
     output: fan1
     id: fan1_speed
-    name: ${fdevicename} Fan 1 Speed
+    name: ${fdevicename}Fan 1 Speed
     #entity_category: "CONFIG"
     icon: mdi:fan
     restore_mode: RESTORE_DEFAULT_OFF
@@ -822,7 +885,7 @@ fan:
   - platform: speed
     output: fan2
     id: fan2_speed
-    name: ${fdevicename} Fan 2 Speed
+    name: ${fdevicename}Fan 2 Speed
     #entity_category: "CONFIG"
     icon: mdi:fan
     restore_mode: RESTORE_DEFAULT_OFF
@@ -830,7 +893,7 @@ fan:
   - platform: speed
     output: fan3
     id: fan3_speed
-    name: ${fdevicename} Fan 3 Speed
+    name: ${fdevicename}Fan 3 Speed
     #entity_category: "CONFIG"
     icon: mdi:fan
     restore_mode: RESTORE_DEFAULT_OFF
@@ -838,14 +901,14 @@ fan:
   - platform: speed
     output: fan4
     id: fan4_speed
-    name: ${fdevicename} Fan 4 Speed
+    name: ${fdevicename}Fan 4 Speed
     #entity_category: "CONFIG"
     icon: mdi:fan
     restore_mode: RESTORE_DEFAULT_OFF
 
 text_sensor:
   - platform: template
-    name: ${fdevicename} Device Sensor
+    name: ${fdevicename}Device Sensor
     entity_category: "DIAGNOSTIC"
     icon: mdi:devices
     web_server:
@@ -854,32 +917,32 @@ text_sensor:
       return {"ESP32 Control Board"};
 
   - platform: version
-    name: ${fdevicename} Version
+    name: ${fdevicename}Version
     entity_category: "DIAGNOSTIC"
     web_server:
       sorting_weight: 15
 
   - platform: wifi_info
     ip_address:
-      name: ${fdevicename} IP Address
+      name: ${fdevicename}IP Address
       entity_category: "DIAGNOSTIC"
       icon: mdi:ip
       web_server:
         sorting_weight: 0
     ssid:
-      name: ${fdevicename} Connected SSID
+      name: ${fdevicename}Connected SSID
       entity_category: "DIAGNOSTIC"
       icon: mdi:wifi
       web_server:
         sorting_weight: 2
     bssid:
-      name: ${fdevicename} Connected BSSID
+      name: ${fdevicename}Connected BSSID
       entity_category: "DIAGNOSTIC"
       icon: mdi:wifi
       web_server:
         sorting_weight: 3
     mac_address:
-      name: ${fdevicename} Mac Wifi Address
+      name: ${fdevicename}Mac Wifi Address
       entity_category: "DIAGNOSTIC"
       icon: mdi:wifi
       web_server:
@@ -887,17 +950,17 @@ text_sensor:
 
   - platform: debug
  #   device:
- #     name: ${fdevicename} Device Info
+ #     name: ${fdevicename}Device Info
     reset_reason:
-      name: ${fdevicename} Reset Reason
+      name: ${fdevicename}Reset Reason
       entity_category: "DIAGNOSTIC"
   
 binary_sensor:
   - platform: status
-    name: ${fdevicename} Status
+    name: ${fdevicename}Status
     entity_category: "DIAGNOSTIC"
     icon: mdi:lan-connect
   - platform: template
     id: alarm_sen
-    name: ${fdevicename} Alarm
+    name: ${fdevicename}Alarm
     icon: mdi:fire
