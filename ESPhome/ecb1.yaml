@@ -493,7 +493,7 @@ select:
     restore_value: true
     options:
       - AHT20T
-      - ANT20H
+      - AHT20H
       - Dallas_1
       - Dallas_2
       - Dallas_3
