@@ -37,8 +37,8 @@ A 3D printed enclosure is also available: https://www.tindie.com/products/29364/
 needs to match the voltage of the PWM fan (or other device) you are driving. Board has an onboard
 self-resetting flex fuse rated at 12 amps.
 
-* To place on WiFi network use 2.4G phone to connect to "AVFAN1 Fallback Hotspot" with password "esphome1" ("trek6666" in some factory flashes). Once connected to your WiFi network, to access the webpage of
-the device browse to http://avfan1.local
+* To place on WiFi network use 2.4G phone to connect to "ECB1 Fallback Hotspot" with password "esphome1" ("trek6666" in some factory flashes). Once connected to your WiFi network, to access the webpage of
+the device browse to http://ecb1.local
 
 * Device is flashed with an exmaple ESPhome binary image that has manual control over fans 
 and automatic control which can be enabled based the target temperature setting.  Four temperature
@@ -46,7 +46,7 @@ sensors control each of the four PWM fan connectors.
 Flashed binary image  has "api:" disabled, MQTT enabled.
 
 * For customization, downlaod the example (flashed) code from 
-https://github.com/ESP32andmore/ECB/blob/main/ESPhome/avfan1.yaml
+https://github.com/ESP32andmore/ECB/blob/main/ESPhome/ecb1.yaml
 
 * Also update WiFi and MQTT server credentials as required.
 
