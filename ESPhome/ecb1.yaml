@@ -18,19 +18,16 @@ substitutions:
 # Connect your Dallas sensors with logger: DEBUG enabled (factory flash default).
 # Open the ESPHome webtool, connect to the ECB board, view the "Logs" window, hit "Reset",
 # and search for Dallas scan addresses and replace the below addresses with your unique ones.
-# Example Scan
-#[18:16:42][D][dallas.sensor:084]:     0x8b3ca8f64935b228 4
-#[18:16:42][D][dallas.sensor:084]:     0x783c0af6490d3628 2
-#[18:16:42][D][dallas.sensor:084]:     0xc13c01f09642c928 1
-#[18:16:42][D][dallas.sensor:084]:     0x043c6ef649772f28 3
-  dallasaddress1: "0xc13c01f09642c928"
-  dallasaddress2: "0x783c0af6490d3628"
-  dallasaddress3: "0x043c6ef649772f28"
-  dallasaddress4: "0x8b3ca8f64935b228"
-  #dallasaddress1: "0x680000006a766a28"
-  #dallasaddress2: "0x290000006b186628"
-  #dallasaddress3: "0x690000006b6ef628"
-  #dallasaddress4: "0xbc0000006b120328"
+
+
+  dallasaddress1: "0xf80000006a65f428"
+  dallasaddress2: "0x000000006b142a28"
+  dallasaddress3: "0x730000006a7b9d28"
+  dallasaddress4: "0xb70000006b3b0328"
+  #dallasaddress1: "0xfb0000006b026828"
+  #dallasaddress2: "0xbb00000098e6e128"
+  #dallasaddress3: "0x380000006b50a528"
+  #dallasaddress4: "0x170000006b134d28"
 
 
 
@@ -47,11 +44,12 @@ esphome:
   name: ${devicename}
   friendly_name: ${friendlyname}
 
+
 #  on_boot:
 #  - priority: 900.0
 #    then:
 #      - lambda: |-
-#          id(cpu_speed) = ESP.getCpuFreqMHz();
+#          id(cpu_speed) = esp_clk_cpu_freq();
 
 esp32:
   board: wemos_d1_mini32
@@ -84,7 +82,7 @@ wifi:
       gateway: 192.168.100.2
       subnet: 255.255.255.0
     
-#captive_portal:
+captive_portal:
 
 #esp32_improv:
   #authorizer: false
@@ -124,7 +122,7 @@ debug:
   update_interval: 1s
 
 logger:
-  level: Debug
+  level: Error
 
 globals:
   - id: fan1_sum
@@ -833,26 +831,25 @@ sensor:
       sorting_weight: 6
     update_interval: 1s
 
-  - platform: template
-    name: ${fdevicename}CPU Speed
-    accuracy_decimals: 0
-    unit_of_measurement: Mhz
-    entity_category: "DIAGNOSTIC"
-    icon: mdi:sine-wave
-    web_server:
-      sorting_weight: 5
-    lambda: |-
-      return (id(cpu_speed));
-
-#    id: sys_esp_temperature
-#    name: ${fdevicename}ESP Temp
-#    lambda: return temperatureRead();
-#    unit_of_measurement: °C
+#  - platform: template
+#    name: ${fdevicename}CPU Speed
+#    accuracy_decimals: 0
+#    unit_of_measurement: Mhz
 #    entity_category: "DIAGNOSTIC"
-#    icon: mdi:thermometer
+#    icon: mdi:sine-wave
 #    web_server:
-#      sorting_weight: 7
-#    update_interval: 30s
+#      sorting_weight: 5
+#    lambda: |-
+#      return (id(cpu_speed)/1000000);
+
+  - platform: internal_temperature
+    name: ${fdevicename}ESP32 Temp
+    unit_of_measurement: °C
+    entity_category: "DIAGNOSTIC"
+    icon: mdi:thermometer
+    web_server:
+      sorting_weight: 7
+    update_interval: 30s
 
   - platform: debug
     free:
@@ -914,7 +911,7 @@ text_sensor:
     web_server:
       sorting_weight: 14
     lambda: |-
-      return {"ESP32 Control Board"};
+      return {"ESP32 Control Board (IDF)"};
 
   - platform: version
     name: ${fdevicename}Version
